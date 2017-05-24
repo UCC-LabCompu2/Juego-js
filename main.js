@@ -83,14 +83,13 @@ function ActualizarEstado() {
     }
 
     // Actualizo posición de los enemigos
-    for (var i = 0; i < enemigos.length; i++) {
-        enemigos[i].posY += enemigos[i].vel;
-        if (enemigos[i].posY > canvas.height) {
-            enemigos[i].posY = 0;
-            enemigos[i].posX = Math.random() * canvas.width;
-        }
-    }
+    enemigos.forEach(function (enemigo, idx) {
+        enemigo.posY += enemigo.vel;
+        if (enemigo.posY > canvas.height)
+            enemigos.splice(idx, 1);
+    });
 
+    // Muevo cada bala y verifico que no este fuera de la pantalla
     balas.forEach(function (bala, idx) {
         bala.posY += bala.vel;
         if (bala.posY < 0)
