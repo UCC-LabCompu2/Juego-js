@@ -9,6 +9,7 @@ var ctx = canvas.getContext('2d');
 var fondo;
 var teclado = [];
 var enemigos = [];
+var balas = [];
 
 var nave = {
     posX: 400,
@@ -32,6 +33,10 @@ function Dibujar() {
         ctx.fillRect(enemigos[i].posX, enemigos[i].posY, 20, 20);
     }
 
+    for (i = 0; i < balas.length; i++) {
+        ctx.fillStyle = 'yellow';
+        ctx.fillRect(balas[i].posX, balas[i].posY, 2, 4);
+    }
 }
 
 function ActualizarEstado() {
@@ -49,6 +54,13 @@ function ActualizarEstado() {
     if (teclado[39]) {  // izq
         nave.posX += nave.vel;
     }
+    if (teclado[32]) {  // Disparo
+        balas.push({    // Agrego una bala
+            posX: nave.posX,
+            posY: nave.posY,
+            vel: -8
+        });
+    }
 
     // Verifico que la nave no salga de los bordes de la pantalla
     if (nave.posY < 0)
@@ -60,7 +72,7 @@ function ActualizarEstado() {
     if (nave.posX > canvas.width)
         nave.posX = canvas.width;
 
-
+    // Agrego enemigos si no hay
     if (enemigos.length < 15) {
         if (Math.random() > 0.9)
             enemigos.push({
@@ -70,6 +82,7 @@ function ActualizarEstado() {
             });
     }
 
+    // Actualizo posición de los enemigos
     for (var i = 0; i < enemigos.length; i++) {
         enemigos[i].posY += enemigos[i].vel;
         if (enemigos[i].posY > canvas.height) {
@@ -77,6 +90,12 @@ function ActualizarEstado() {
             enemigos[i].posX = Math.random() * canvas.width;
         }
     }
+
+    balas.forEach(function (bala, idx) {
+        bala.posY += bala.vel;
+        if (bala.posY < 0)
+            balas.splice(idx, 1);
+    });
 }
 
 function LeeEntradas() {
@@ -98,7 +117,6 @@ fondo.onload = function () {
 
 function teclaAbajo(e) {
     teclado[e.keyCode] = true;
-    console.log(e.keyCode);
 }
 function teclaArriba(e) {
     teclado[e.keyCode] = false;
