@@ -95,6 +95,19 @@ function ActualizarEstado() {
         if (bala.posY < 0)
             balas.splice(idx, 1);
     });
+
+    //Detectar colicion de enemigos con balas
+    balas.forEach(function (bala, idxbala) {
+        enemigos.forEach(function (enemigo, idxene) {
+            if (bala.posX > enemigo.posX &&           // lado izq
+                bala.posX + 2 < enemigo.posX + 20 &&  // lado der
+                bala.posY > enemigo.posY &&           // arriba
+                bala.posY + 4 < enemigo.posY + 20) {  // Abajo
+                balas.splice(idxbala, 1);
+                enemigos.splice(idxene, 1);
+            }
+        });
+    });
 }
 
 function LeeEntradas() {
