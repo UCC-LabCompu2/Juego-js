@@ -12,11 +12,12 @@ var enemigos = [];
 
 var nave = {
     posX: 400,
-    posY: 300,
+    posY: 500,
     vel: 5
 };
 
 function Dibujar() {
+    var i;
     // Limpio con la imagen de fondo
     ctx.drawImage(fondo, 0, 0);
 
@@ -26,7 +27,7 @@ function Dibujar() {
 
     // Dibujo Enemigos
 
-    for (var i = 0; i < enemigos.length; i++) {
+    for (i = 0; i < enemigos.length; i++) {
         ctx.fillStyle = 'red';
         ctx.fillRect(enemigos[i].posX, enemigos[i].posY, 20, 20);
     }
@@ -36,38 +37,39 @@ function Dibujar() {
 function ActualizarEstado() {
 
     // Teclas Nave
-    if (teclado[38]) {
+    if (teclado[38]) { // arriba
         nave.posY -= nave.vel;
     }
-    if (teclado[40]) {
+    if (teclado[40]) { // abajo
         nave.posY += nave.vel;
     }
-    if (teclado[37]) {
+    if (teclado[37]) { // derecha
         nave.posX -= nave.vel;
     }
-    if (teclado[39]) {
+    if (teclado[39]) {  // izq
         nave.posX += nave.vel;
     }
+
+    // Verifico que la nave no salga de los bordes de la pantalla
     if (nave.posY < 0)
         nave.posY = 0;
-
     if (nave.posX < 0)
         nave.posX = 0;
-
     if (nave.posY > canvas.height)
         nave.posY = canvas.height;
-
     if (nave.posX > canvas.width)
         nave.posX = canvas.width;
 
 
-    if (enemigos.length < 5) {
-        enemigos.push({
-            posX: Math.random() * canvas.width,
-            posY: 0,
-            vel: 4
-        });
+    if (enemigos.length < 15) {
+        if (Math.random() > 0.9)
+            enemigos.push({
+                posX: Math.random() * canvas.width,
+                posY: 0,
+                vel: 4
+            });
     }
+
     for (var i = 0; i < enemigos.length; i++) {
         enemigos[i].posY += enemigos[i].vel;
         if (enemigos[i].posY > canvas.height) {
